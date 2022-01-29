@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block content %}
+  {% include 'navbar.html' %}
+
+  <main role="main" class="container">
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+      <h1 class="h2">Season Chart</h1>
+      <div class="btn-toolbar mb-2 mb-md-0">
+        <form name="dropdown-form" action="/data" method="POST">
+          <select class="my-dropdown-menu" name="season" style="padding:8px;border-radius:8px;">
+            {% for season in seasons %}
+            {% if season == current_season %}
+            <option selected value="{{ season }}">{{ season }}</option>
+            {% else %}
+            <option value="{{ season }}">{{ season }}</option>
+            {% endif %}
+            {% endfor %}
+          </select>
+          <select class="my-dropdown-menu" name="league" style="padding:8px;border-radius:8px;">
+            {% for league in leagues %}
+            {% if league == current_league %}
+            <option selected value="{{ league }}">{{ league }}</option>
+            {% else %}
+            <option value="{{ league }}">{{ league }}</option>
+            {% endif %}
+            {% endfor %}
+          </select>
+          <button class="submit-btn" type="submit" style="padding:8px;border-radius:8px;">Apply</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="row mt-5">
+        {{ div_chart|safe }}
+      </div>
+    </div>
+  </main>
+  {{ script_chart|safe }}
+{% endblock %}

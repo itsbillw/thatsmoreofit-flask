@@ -1,0 +1,78 @@
+body, html {
+  height: 100%;
+  margin: 0;
+  font: 400 15px/1.8 "Lato", sans-serif;
+  color: #777;
+}
+
+.bgimg {
+  background-image: url("../images/background.jpg");
+  padding-top: 5rem;
+  position: relative;
+  opacity: 0.85;
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  min-height: 100%;
+}
+
+.caption {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 100%;
+  text-align: center;
+  color: #000;
+}
+
+.caption span.border {
+  background-color: #111;
+  color: #fff;
+  padding: 18px;
+  font-size: 25px;
+  letter-spacing: 10px;
+}
+
+/* Font Awesome */
+.fa {
+  width: 30px;
+  text-align: center;
+  text-decoration: none;
+  margin: 5px 2px;
+  color: white;
+}
+
+.fa:hover {
+  opacity: 0.7;
+}
+
+.submit-btn {
+    padding:8px 16px;
+    border-radius:4px;
+    margin-left:8px;
+    background-color:#fff;
+    border:2px solid #FA7268;
+    color:#FA7268;
+    font-weight:bold;
+    transition: 0.2s;
+}
+
+.submit-btn:hover {
+    background-color:#FA7268;
+    color:#fff;
+}
+
+/*
+ * Content
+ */
+
+[role="main"] {
+  padding-top: 133px; /* Space for fixed navbar */
+}
+
+@media (min-width: 768px) {
+  [role="main"] {
+    padding-top: 58px; /* Space for fixed navbar */
+  }
+}
