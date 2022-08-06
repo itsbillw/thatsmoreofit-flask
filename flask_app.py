@@ -5,7 +5,6 @@ from bokeh.embed import components
 
 from data_functions import season_chart
 
-
 # local testing
 filename = "data/football_data.parquet"
 
@@ -13,6 +12,7 @@ filename = "data/football_data.parquet"
 # filename = "/home/itsbillw/thatsmoreofit/data/football_data.parquet"
 
 app = Flask(__name__)
+
 
 # Home page
 @app.route('/')
@@ -22,17 +22,16 @@ def home():
 
 @app.route('/data', methods=['GET', 'POST'])
 def data():
-
     df = pd.read_parquet(filename)
     leagues = df["League"].unique().tolist()
     seasons = df["Season"].unique().tolist()
 
     current_season = request.form.get("season")
-    if current_season == None:
+    if current_season is None:
         current_season = "2021-22"
 
     current_league = request.form.get("league")
-    if current_league == None:
+    if current_league is None:
         current_league = "Premier League"
 
     season_data = df[(df["Season"] == current_season) &
