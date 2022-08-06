@@ -19,7 +19,7 @@ def rebuild_current_season_data(file=filename):
             multi_season_leagues[season][league])
         season_data["Season"] = season
         season_data["League"] = league
-        df = df.append(season_data)
+        df = pd.concat([df, season_data])
     df.to_parquet(file, index=False)
 
 
@@ -32,7 +32,7 @@ def rebuild_all_season_data(file=filename):
                 multi_season_leagues[season][league])
             season_data["Season"] = season
             season_data["League"] = league
-            df = df.append(season_data)
+            df = pd.concat([df, season_data])
     df.to_parquet(file, index=False)
 
 
@@ -79,7 +79,7 @@ def parse_season_data(filename):
         df['index'] = df['index'].add(1)
         df = df.rename(columns={"index": "Played"})
 
-        results = results.append(df)
+        results = pd.concat([results, df])
 
     results = results.reset_index(drop=True)
 
