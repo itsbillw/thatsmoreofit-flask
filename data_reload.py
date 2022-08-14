@@ -36,38 +36,38 @@ def rebuild_all_season_data(file=filename):
     df.to_parquet(file, index=False)
 
 
-def parse_season_data(filename):
+def parse_season_data(league, season):
 
-    columns = ['Div', 'Date', 'HomeTeam', 'AwayTeam', 'FTHG', 'FTAG', 'FTR']
+    columns = ['name', 'date', 'home.name', 'away.name', 'fulltime.home', 'fulltime.away']
     source_df = pd.read_csv(filename, usecols=columns,
-                            parse_dates=["Date"], dayfirst=True)
+                            parse_dates=["date"], dayfirst=True)
     source_df.dropna(how="all", inplace=True)
 
     results = pd.DataFrame()
 
-    teams = source_df["HomeTeam"].sort_values().unique().tolist()
+    teams = source_df["home.name"].sort_values().unique().tolist()
 
     for team in teams:
-        df = source_df[(source_df['HomeTeam'] == team) |
-                       (source_df['AwayTeam'] == team)].copy()
+        df = source_df[(source_df['home.name'] == team) |
+                       (source_df['away.name'] == team)].copy()
 
         df["Team"] = df.apply(lambda x: team, axis=1)
         df["Opposition"] = df.apply(
-            lambda x: x["AwayTeam"] if x["HomeTeam"] == team else x["HomeTeam"], axis=1)
-        df['HomeAway'] = df.apply(
-            lambda x: "H" if x["HomeTeam"] == team else "A", axis=1)
+            lambda x: x["away.name"] if x["home.name"] == team else x["home.name"], axis=1)
+        df['home.name'] = df.apply(
+            lambda x: "H" if x["home.name"] == team else "A", axis=1)
 
-        df["Result"] = df.apply(lambda x: "W" if (x["FTR"] == "H" and x["HomeTeam"] == team) or
-                                (x["FTR"] == "A" and x["AwayTeam"] == team) else
-                                ("L" if (x["FTR"] == "A" and x["HomeTeam"] == team) or
-                                 (x["FTR"] == "H" and x["AwayTeam"] == team) else "D"), axis=1)
+        df["Result"] = df.apply(lambda x: "W" if (x["FTR"] == "H" and x["home.name"] == team) or
+                                (x["FTR"] == "A" and x["away.name"] == team) else
+                                ("L" if (x["FTR"] == "A" and x["home.name"] == team) or
+                                 (x["FTR"] == "H" and x["away.name"] == team) else "D"), axis=1)
         df["MatchPoints"] = df.apply(lambda x: 3 if x["Result"] == "W" else (
             1 if x["Result"] == "D" else 0), axis=1)
         df["Points"] = df["MatchPoints"].cumsum()
 
-        df["GF"] = df.apply(lambda x: x["FTHG"] if x["HomeTeam"]
+        df["GF"] = df.apply(lambda x: x["FTHG"] if x["home.name"]
                             == team else x["FTAG"], axis=1)
-        df["GA"] = df.apply(lambda x: x["FTAG"] if x["HomeTeam"]
+        df["GA"] = df.apply(lambda x: x["FTAG"] if x["home.name"]
                             == team else x["FTHG"], axis=1)
         df["GD"] = df.apply(lambda x: x["GF"] - x["GA"], axis=1)
 
